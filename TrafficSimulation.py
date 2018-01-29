@@ -1,4 +1,5 @@
 from random import random
+from copy import deepcopy
 import numpy as np
 
 class TrafficSimulation():
@@ -20,20 +21,41 @@ class TrafficSimulation():
 
     def step(self):
         length = self.road_length
+        temp_state = deepcopy(self.state)
         for index, speed in enumerate(self.state):
             if speed < 0:
                 continue
-            # elif speed < self.v_max and self.state[(index+1)%length] < 0:
-            #     self.state[index] += 1
             j = 1
             while self.state[(index + j)%length] < 0 and j <= speed:
                 j += 1
-                self.state[index] = min(j - 1, self.v_max)
-            print("At cell %d there is a car %d cells ahead with a speed of %d" % (index,j,self.state[(index+j)%length]))
+            if speed < self.v_max and (j > speed + 1 or self.state[(index+j)%length] < 0):
+                temp_state[index] += 1
+            else:
+                temp_state[index] = j - 1
+            if temp_state[index] > 0 and random() < self.p:
+                temp_state[index] -= 1
+        temp_advancement_state = [-1]*length
+        for index, speed in enumerate(temp_state):
+            if speed < 0:
+                continue
+            temp_advancement_state[(index + speed)%length] = speed
+        self.state = temp_advancement_state
 
     def display(self):
         print(''.join('.' if x == -1 else str(x) for x in self.state))
 
-ts = TrafficSimulation(10, 0.5, 5, 0.05)
+    def checkup(self, index, j, state):
+        print("At cell %d with speed %d there is a car at %d with a speed of %d" % (index,state[index],(index+j)%self.road_length,state[(index+j)%self.road_length]))
+
+ts = TrafficSimulation(100, 0.03, 5, 0.5)
 ts.display()
-ts.step()
+for i in range(40):
+    ts.step()
+    ts.display()
+
+print("")
+ts = TrafficSimulation(100, 0.1, 5, 0.5)
+ts.display()
+for i in range(40):
+    ts.step()
+    ts.display()
