@@ -9,17 +9,18 @@ def pause():
     time.sleep(0.1)
 
 # not animated
-sim = TrafficSimulation(100, 0.03, 5, 0.5)
-sim.display()
-for i in range(40):
-    sim.step()
-    sim.display()
-
-# animated
 sim = TrafficSimulation(100, 0.1, 5, 0.5)
-sim.display()
 for i in range(40):
-    pause()
-    cls()
     sim.step()
-    sim.display()
+    # sim.display()
+#
+# # animated
+# sim = TrafficSimulation(100, 0.1, 5, 0.5)
+# sim.display()
+# for i in range(40):
+#     pause()
+#     cls()
+#     sim.step()
+#     sim.display()
+#
+# sim = TrafficSimulation()
