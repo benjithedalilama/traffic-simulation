@@ -25,20 +25,40 @@ class TrafficSimulation():
         for index, speed in enumerate(self.state):
             if speed < 0:
                 continue
+
+            # count spaces in front
             j = 1
-            while self.state[(index + j)%length] < 0 and j <= speed:
+            while self.state[(index + j)%length] < 0:
                 j += 1
+
+            # accelerate, or slow down due to cars
             if speed < self.v_max and (j > speed + 1 or self.state[(index+j)%length] < 0):
                 temp_state[index] += 1
-            else:
+            elif j <= speed:
                 temp_state[index] = j - 1
+
+            # random slow down
             if temp_state[index] > 0 and random() < self.p:
                 temp_state[index] -= 1
+
+        # update the positions
         temp_advancement_state = [-1]*length
         for index, speed in enumerate(temp_state):
             if speed < 0:
                 continue
             temp_advancement_state[(index + speed)%length] = speed
+
+        # peer into the future to slow down, but dont change position
+        for index, speed in enumerate(temp_advancement_state):
+            if speed < 0:
+                continue
+            j = 1
+            while temp_advancement_state[(index + j)%length] < 0:
+                j += 1
+            if j <= speed:
+                temp_advancement_state[index] = j - 1
+
+        # iterate the state, and please stop the hate
         self.state = temp_advancement_state
 
     def display(self):
@@ -49,7 +69,7 @@ class TrafficSimulation():
 
 ts = TrafficSimulation(100, 0.03, 5, 0.5)
 ts.display()
-for i in range(40):
+for i in range(2):
     ts.step()
     ts.display()
 
