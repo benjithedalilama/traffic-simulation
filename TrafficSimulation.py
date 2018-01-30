@@ -1,6 +1,5 @@
 from random import random
 from copy import deepcopy
-import numpy as np
 
 class TrafficSimulation():
     def __init__(self, road_length, traffic_density, v_max, p, start_state = []):
@@ -63,19 +62,3 @@ class TrafficSimulation():
 
     def display(self):
         print(''.join('.' if x == -1 else str(x) for x in self.state))
-
-    def checkup(self, index, j, state):
-        print("At cell %d with speed %d there is a car at %d with a speed of %d" % (index,state[index],(index+j)%self.road_length,state[(index+j)%self.road_length]))
-
-ts = TrafficSimulation(100, 0.03, 5, 0.5)
-ts.display()
-for i in range(2):
-    ts.step()
-    ts.display()
-
-print("")
-ts = TrafficSimulation(100, 0.1, 5, 0.5)
-ts.display()
-for i in range(40):
-    ts.step()
-    ts.display()
