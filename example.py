@@ -18,7 +18,7 @@ def get_flow_array(densities, iterations):
         avg_flow_arr.append(avg_flow)
     return avg_flow_arr
 
-dens = np.arange(0.01,1.0,.01)
+dens = np.arange(0.01,1.0,.001)
 its = 200
 
 flows = get_flow_array(dens, its)
@@ -27,12 +27,11 @@ flows = np.array(flows)
 # df = pd.DataFrame({'density':dens, 'flow':flows})
 # ax = sns.lmplot(x='density', y='flow', fit_reg=True, data=df)
 plt.scatter(dens,flows,s=2)
-z = np.polyfit(dens, flows, 3)
-f = np.poly1d(z)
-plt.plot(dens, f(dens))
-plt.xlabel('density (cars per cell)')
+# z = np.polyfit(dens, flows, 3)
+# f = np.poly1d(z)
+# plt.plot(dens, f(dens))
+plt.xlabel('Density (cars per cell)')
 plt.ylabel('Flow (cars per time-step)')
 plt.title('Flow vs. Density')
 plt.grid(True)
 plt.savefig("test.png")
-raise Exception
