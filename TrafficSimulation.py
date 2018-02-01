@@ -2,11 +2,12 @@ import random
 from copy import deepcopy
 
 class TrafficSimulation():
-    def __init__(self, road_length, traffic_density, v_max, p, start_state = [], verbose = True):
+    def __init__(self, road_length, traffic_density, v_max, p, start_state = [], verbose = True, strategy = 'rules'):
         self.road_length = road_length
         self.traffic_density = traffic_density
         self.v_max = v_max
         self.p = p
+        self.strategy = strategy
         self.verbose = verbose
         self.throughput = 0
         if not start_state:
@@ -25,6 +26,8 @@ class TrafficSimulation():
         length = self.road_length
         speeds = deepcopy(self.state)
 
+        if self.strategy == 'middle': prev_j = 0
+
         for index, speed in enumerate(self.state):
             if speed < 0:
                 continue
@@ -40,7 +43,13 @@ class TrafficSimulation():
 
             # slow down due to cars
             if j <= speed:
-                speeds[index] = j - 1
+                if self.strategy == 'rules':
+                    speeds[index] = j - 1
+                else:
+                    total_j = prev_j + j
+                    middle = round(total_j/2)
+                    speeds[index] = j - middle
+                    prev_j = j
 
             # random slow down
             if speeds[index] > 0 and random.random() < self.p:
@@ -65,5 +74,5 @@ class TrafficSimulation():
         flow = self.throughput / self.road_length
         return flow
 
-    def display(state):
+    def display(self, state):
         print(''.join('.' if x == -1 else str(x) for x in state))
