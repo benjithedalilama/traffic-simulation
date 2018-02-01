@@ -27,7 +27,7 @@ for strategy in strategies:
     flows = np.array(flows)
     # df = pd.DataFrame({'density':dens, 'flow':flows})
     # ax = sns.lmplot(x='density', y='flow', fit_reg=True, data=df)
-    plt.scatter(dens,flows,s=2)
+    plt.scatter(dens,flows,s=2,label='%s'%strategy)
     # z = np.polyfit(dens, flows, 3)
     # f = np.poly1d(z)
     # plt.plot(dens, f(dens))
@@ -35,4 +35,9 @@ for strategy in strategies:
     plt.ylabel('Flow (cars per time-step)')
     plt.title('Flow vs. Density')
     plt.grid(True)
-    plt.savefig("test.png")
+plt.legend(loc='upper right')
+plt.savefig("test.png")
+
+# sim = TrafficSimulation(100, 0.1, 5, 0.5, verbose=True, strategy='middle')
+# for i in range(30):
+#     sim.step()

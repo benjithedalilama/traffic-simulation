@@ -26,7 +26,9 @@ class TrafficSimulation():
         length = self.road_length
         speeds = deepcopy(self.state)
 
-        if self.strategy == 'middle': prev_j = 0
+        if self.strategy == 'middle':
+            prev_j = 0
+            offset = 0
 
         for index, speed in enumerate(self.state):
             if speed < 0:
@@ -48,7 +50,11 @@ class TrafficSimulation():
                 else:
                     total_j = prev_j + j
                     middle = round(total_j/2)
-                    speeds[index] = j - middle
+                    offset = j - middle
+                    if offset < 0:
+                        speeds[index] = 0
+                    else:
+                        speeds[index] = offset
                     prev_j = j
 
             # random slow down
