@@ -56,11 +56,14 @@ class TrafficSimulation():
                     offset = j - middle
                     # example: [4......3...5]
                     # cars cant move backwards on a highway, so just make them
-                    # stop. This is slightly unrealistic and needs improvement
+                    # stop. Keep in mind this displays the state of the road
+                    # before actual movement happens
                     if offset < 0:
                         speeds[index] = 0
+                        print('offset = %d set to zero at index %d'%(offset,index))
                     else:
                         speeds[index] = offset
+                        print('offest = %d'%offset)
                     prev_j = j
 
             # random slow down
