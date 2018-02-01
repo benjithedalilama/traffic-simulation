@@ -49,8 +49,14 @@ class TrafficSimulation():
                     speeds[index] = j - 1
                 elif self.strategy == 'middle':
                     total_j = prev_j + j
+                    # the round() function is making sure if the space between
+                    # is even, the car will be further back instead of closer to tailgating
+                    # not sure how this behavior propagates back
                     middle = round(total_j/2)
                     offset = j - middle
+                    # example: [4......3...5]
+                    # cars cant move backwards on a highway, so just make them
+                    # stop. This is slightly unrealistic and needs improvement
                     if offset < 0:
                         speeds[index] = 0
                     else:
