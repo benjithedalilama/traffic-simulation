@@ -47,7 +47,7 @@ class TrafficSimulation():
             if j <= speed:
                 if self.strategy == 'rules':
                     speeds[index] = j - 1
-                else:
+                elif self.strategy == 'middle':
                     total_j = prev_j + j
                     middle = round(total_j/2)
                     offset = j - middle
