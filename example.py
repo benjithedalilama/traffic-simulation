@@ -1,9 +1,10 @@
 from trafficsimulation import TrafficSimulation
-# import seaborn as sns
+import time
 import numpy as np
-# import pandas as pd
 import matplotlib.pyplot as plt
-
+import pandas as pd
+from sklearn.model_selection import GridSearchCV
+from sklearn.kernel_ridge import KernelRidge
 
 def get_flow_array(densities, iterations, strategy):
     avg_flow_arr = []
@@ -18,21 +19,25 @@ def get_flow_array(densities, iterations, strategy):
         avg_flow_arr.append(avg_flow)
     return avg_flow_arr
 
-dens = np.arange(0.00,1.0,.001)
+dens = np.arange(0.0,1.0,.001)
 its = 200
-strategies = ['rules','middle']
+strategies = ['regular','middle']
+train_size = len(dens)
 for strategy in strategies:
     flows = get_flow_array(dens, its, strategy)
-    dens = np.array(dens)
     flows = np.array(flows)
-    # df = pd.DataFrame({'density':dens, 'flow':flows})
-    # ax = sns.lmplot(x='density', y='flow', fit_reg=True, data=df)
     plt.scatter(dens,flows,s=2,label='%s'%strategy)
-    # z = np.polyfit(dens, flows, 3)
-    # f = np.poly1d(z)
-    # plt.plot(dens, f(dens))
+    kr = GridSearchCV(KernelRidge(kernel='chi2', gamma=0.1), cv=5,
+                  param_grid={"alpha": [1e0, 0.1, 1e-2, 1e-3],
+                              "gamma": np.logspace(-2, 2, 5)})
+    dens = dens.reshape(len(dens),1)
+    flows = flows.reshape(len(flows),1)
+    kr.fit(dens[:train_size], flows[:train_size])
+    y_kr = kr.predict(dens)
+    color = 'r' if strategy == 'regular' else 'g'
+    plt.plot(dens, y_kr, label='%s KRR'%strategy,c=color,linewidth=1)
     plt.xlabel('Density (cars per cell)')
-    plt.ylabel('Flow (cars per time-step)')
+    plt.ylabel('Flow (total cars per time-step)')
     plt.title('Flow vs. Density')
     plt.grid(True)
 plt.legend(loc='upper right')
