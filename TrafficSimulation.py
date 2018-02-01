@@ -60,10 +60,8 @@ class TrafficSimulation():
                     # before actual movement happens
                     if offset < 0:
                         speeds[index] = 0
-                        print('offset = %d set to zero at index %d'%(offset,index))
                     else:
                         speeds[index] = offset
-                        print('offest = %d'%offset)
                     prev_j = j
 
             # random slow down
