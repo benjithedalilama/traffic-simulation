@@ -19,7 +19,7 @@ def get_flow_array(densities, iterations, strategy):
         avg_flow_arr.append(avg_flow)
     return avg_flow_arr
 
-dens = np.arange(0.0,1.0,.001)
+dens = np.repeat(np.arange(0.0,1.0,.005),5)
 its = 200
 strategies = ['regular','middle']
 train_size = len(dens)
