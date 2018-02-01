@@ -56,8 +56,8 @@ class TrafficSimulation():
                     offset = j - middle
                     # example: [4......3...5]
                     # cars cant move backwards on a highway, so just make them
-                    # stop. Keep in mind this displays the state of the road
-                    # before actual movement happens
+                    # stop. Keep in mind the state of the road before actual
+                    # movement happens is displayed if sim is verbose
                     if offset < 0:
                         speeds[index] = 0
                     else:
