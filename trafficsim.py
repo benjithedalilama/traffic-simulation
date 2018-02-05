@@ -21,19 +21,6 @@ class TrafficSimulation():
     def update_positions(self):
         pass
 
-    def populate_state(self, state):
-        populated_state = []
-        if not state:
-            for i in range(self.road_length):
-                if random.random() < self.traffic_density:
-                    rand_init_speed = random.choice(range(self.v_max))
-                    populated_state.append(rand_init_speed)
-                else:
-                    populated_state.append(-1)
-        else:
-            populated_state = state
-        return populated_state
-
     def get_flow(self):
         pass
 
