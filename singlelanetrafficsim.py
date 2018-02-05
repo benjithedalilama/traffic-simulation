@@ -1,34 +1,32 @@
 import random
 from copy import deepcopy
+from trafficsim import TrafficSimulation
 
-class TrafficSimulation():
+class SingleLaneTrafficSimulation(TrafficSimulation):
+
     def __init__(self, road_length, traffic_density, v_max, p, start_state = [], verbose = True, strategy = 'regular'):
-        self.road_length = road_length
-        self.traffic_density = traffic_density
-        self.v_max = v_max
-        self.p = p
-        self.strategy = strategy
-        self.verbose = verbose
-        self.throughput = 0
-        if not start_state:
-            self.state = []
-            for i in range(road_length):
-                if random.random() < traffic_density:
-                    rand_init_speed = random.choice(range(v_max))
-                    self.state.append(rand_init_speed)
-                else:
-                    self.state.append(-1)
-        else:
-            self.state = start_state
-
+        super().__init__(road_length, traffic_density, v_max, p, verbose = verbose, strategy = strategy)
+        self.state = []
+        self.state = self.populate_state(start_state)
 
     def step(self):
-        length = self.road_length
-        speeds = deepcopy(self.state)
-
         if self.strategy == 'middle':
             prev_j = 0
             offset = 0
+
+        speeds = self.update_speeds()
+
+        if self.verbose:
+            self.display(speeds)
+
+        updated_state = self.update_positions(speeds)
+
+        # iterate the state, and please stop the hate
+        self.state = updated_state
+
+    def update_speeds(self):
+        length = self.road_length
+        speeds = deepcopy(self.state)
 
         for index, speed in enumerate(self.state):
             if speed < 0:
@@ -67,20 +65,19 @@ class TrafficSimulation():
             # random slow down
             if speeds[index] > 0 and random.random() < self.p:
                 speeds[index] -= 1
+        return speeds
 
-        if self.verbose:
-            self.display(speeds)
-
+    def update_positions(self, state):
+        length = self.road_length
         # update the positions
         updated_state = [-1]*length
-        for index, speed in enumerate(speeds):
+        for index, speed in enumerate(state):
             if speed < 0:
                 continue
             updated_state[(index + speed)%length] = speed
             self.throughput += float(speed)
 
-        # iterate the state, and please stop the hate
-        self.state = updated_state
+        return updated_state
 
     def get_flow(self):
         # distance covered by cars divided by length of road
