@@ -9,6 +9,9 @@ class MultiLaneTrafficSimulation(TrafficSimulation):
         self.right_lane = SingleLaneTrafficSimulation(road_length, traffic_density, v_max, p, start_state=right_state, verbose = verbose, strategy = strategy)
 
     def step(self):
+        # basically will just make a while loop to check l spaces back in the
+        # other lane if needing to switch. Then applies the probability filter
+        # on whether the car will actually switch or not
         self.left_lane.step()
         self.right_lane.step()
 
