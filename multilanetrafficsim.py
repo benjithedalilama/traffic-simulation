@@ -3,10 +3,10 @@ from trafficsim import TrafficSimulation
 
 class MultiLaneTrafficSimulation(TrafficSimulation):
 
-    def __init__(self, road_length, traffic_density, v_max, p, left_state = [], right_state = [], verbose = True, strategy = 'regular'):
+    def __init__(self, road_length, traffic_density, v_max, p, left_lane, right_lane, verbose = True, strategy = 'regular'):
         super().__init__(road_length, traffic_density, v_max, p, verbose = verbose, strategy = strategy)
-        self.left_lane = SingleLaneTrafficSimulation(road_length, traffic_density, v_max, p, start_state=left_state, verbose = verbose, strategy = strategy)
-        self.right_lane = SingleLaneTrafficSimulation(road_length, traffic_density, v_max, p, start_state=right_state, verbose = verbose, strategy = strategy)
+        self.left_lane = left_lane if left_lane else SingleLaneTrafficSimulation(road_length, traffic_density, v_max, p, start_state=left_lane.state, verbose = verbose, strategy = strategy)
+        self.right_lane = right_lane if right_lane else SingleLaneTrafficSimulation(road_length, traffic_density, v_max, p, start_state=right_lane.state, verbose = verbose, strategy = strategy)
 
     def step(self):
         # basically will just make a while loop to check l spaces back in the

@@ -47,20 +47,12 @@ class SingleLaneTrafficSimulation(TrafficSimulation):
                     speeds[index] = j - 1
                 elif self.strategy == 'middle':
                     total_j = prev_j + j
-                    # the round() function is making sure if the space between
-                    # is even, the car will be further back instead of closer to tailgating
-                    # not sure how this behavior propagates back
                     middle = round(total_j/2)
                     offset = j - middle
-                    # example: [4......3...5]
-                    # cars cant move backwards on a highway, so just make them
-                    # stop. Keep in mind the state of the road before actual
-                    # movement happens is displayed if sim is verbose
-                    if offset < 0:
-                        speeds[index] = 0
-                    else:
-                        speeds[index] = offset
+                    speeds[index] = 0 if offset < 0 else offset
                     prev_j = j
+                else:
+                    raise ValueError('%s strategy does not exist.'%self.strategy)
 
             # random slow down
             if speeds[index] > 0 and random.random() < self.p:
