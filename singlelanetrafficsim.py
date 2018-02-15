@@ -4,8 +4,8 @@ from trafficsim import TrafficSimulation
 
 class SingleLaneTrafficSimulation(TrafficSimulation):
 
-    def __init__(self, road_length, traffic_density, v_max, p, start_state = [], verbose = True, strategy = 'regular'):
-        super().__init__(road_length, traffic_density, v_max, p, verbose = verbose, strategy = strategy)
+    def __init__(self, road_length, traffic_density, v_max, p_slow, start_state = [], verbose = True, strategy = 'regular'):
+        super().__init__(road_length, traffic_density, v_max, p_slow, verbose = verbose, strategy = strategy)
         self.state = []
         self.state = self.populate_state(start_state)
 
@@ -53,7 +53,7 @@ class SingleLaneTrafficSimulation(TrafficSimulation):
                     raise ValueError('%s strategy does not exist.'%self.strategy)
 
             # random slow down
-            if speeds[index] > 0 and random.random() < self.p:
+            if speeds[index] > 0 and random.random() < self.p_slow:
                 speeds[index] -= 1
         return speeds
 

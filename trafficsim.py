@@ -3,11 +3,11 @@ from copy import deepcopy
 
 class TrafficSimulation():
 
-    def __init__(self, road_length, traffic_density, v_max, p, verbose = True, strategy = 'regular'):
+    def __init__(self, road_length, traffic_density, v_max, p_slow, verbose = True, strategy = 'regular'):
         self.road_length = road_length
         self.traffic_density = traffic_density
         self.v_max = v_max
-        self.p = p
+        self.p_slow = p_slow
         self.strategy = strategy
         self.verbose = verbose
         self.throughput = 0
