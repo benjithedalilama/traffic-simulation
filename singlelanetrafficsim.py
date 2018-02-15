@@ -10,10 +10,6 @@ class SingleLaneTrafficSimulation(TrafficSimulation):
         self.state = self.populate_state(start_state)
 
     def step(self):
-        if self.strategy == 'middle':
-            prev_j = 0
-            offset = 0
-
         speeds = self.update_speeds()
 
         if self.verbose:
@@ -27,6 +23,8 @@ class SingleLaneTrafficSimulation(TrafficSimulation):
     def update_speeds(self):
         length = self.road_length
         speeds = deepcopy(self.state)
+        if self.strategy == 'middle':
+            prev_j = 0
 
         for index, speed in enumerate(self.state):
             if speed < 0:
