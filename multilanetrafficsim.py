@@ -12,6 +12,7 @@ class MultiLaneTrafficSimulation(TrafficSimulation):
         self.l_o_back = l_o_back
         self.p_change = p_change
         self.p_slow = p_slow
+        self.verbose = verbose
         self.left_lane = left_lane if left_lane else SingleLaneTrafficSimulation(road_length, traffic_density, v_max, p_slow, verbose = verbose, strategy = strategy)
         self.right_lane = right_lane if right_lane else SingleLaneTrafficSimulation(road_length, traffic_density, v_max, p_slow, verbose = verbose, strategy = strategy)
 
@@ -33,7 +34,7 @@ class MultiLaneTrafficSimulation(TrafficSimulation):
 
         left_prev_j = 0
         right_prev_j = 0
-
+        changed = 0
         for i, speed_tuple in enumerate(zip(left.state, right.state)):
             # No cars at index
             if speed_tuple[0] < 0 and speed_tuple[1] < 0:
@@ -68,6 +69,13 @@ class MultiLaneTrafficSimulation(TrafficSimulation):
 
         right.state = temp_right_state
         left.state = temp_left_state
+
+    def get_flow(self):
+        left_flow = self.left_lane.get_flow()
+        right_flow = self.right_lane.get_flow()
+
+        flow = (left_flow + right_flow)/2
+        return flow
 
     def display(self):
         print(''.join('.' if x == -1 else str(x) for x in self.left_lane.state))
